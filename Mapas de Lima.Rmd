@@ -1,0 +1,54 @@
+---
+title: "Mapa_Lima"
+author: "Gianfranco Raúl Romero Sucapuca"
+date: "2024-05-03"
+output: html_document
+---
+
+```{r}
+library(rio)
+```
+
+```{r}
+unzip("distritos_INEI.zip", junkpaths = FALSE)
+```
+
+
+```{r}
+library(sf)
+mapa = sf::read_sf("Distrital INEI 2023 geogpsperu SuyoPomalia.shp")
+```
+
+```{r}
+library(dplyr)
+mapa_lima = mapa %>% filter(PROVINCIA == "LIMA")
+```
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+ggplot(mapa_lima) + geom_sf() + theme_void()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
