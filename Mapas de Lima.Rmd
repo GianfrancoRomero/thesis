@@ -41,8 +41,24 @@ dat_map = merge(x = mapa_lima, y = data_lima, by = c("UBIGEO", "DISTRITO"))
 ```
 
 ```{r}
+breaks <- c(0.5, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9)
+
+colors <- c("#FF0000", "#FF6400", "#FFB800", "#FFF800", "#ADD100", "#47A300", "#007500")
+
+dat_map$IDH_interval <- cut(dat_map$IDH, breaks = breaks, include.lowest = TRUE)
+```
+
+```{r}
 LV <- subset(dat_map, DISTRITO == "LA VICTORIA")
 ```
+
+```{r}
+RP_W <- subset(dat_map, ALCALDE_RP == 1)
+RP_L <- subset(dat_map, ALCALDE_RP == 0)
+```
+
+
+
 
 
 ```{r}
@@ -74,21 +90,93 @@ ggplot() + geom_sf(data = RP_W, color = "blue")
 
 
 ```{r}
-breaks <- c(0.5, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9)
-
-colors <- c("#FF0000", "#FF6400", "#FFB800", "#FFF800", "#ADD100", "#47A300", "#007500")
-
-dat_map$IDH_interval <- cut(dat_map$IDH, breaks = breaks, include.lowest = TRUE)
-
 ggplot(dat_map) +
   geom_sf(aes(fill = IDH_interval), color = "black") +
-  geom_sf(data = RP_W, color = "purple", linewidth = 1, fill = NA) +
+  geom_sf(data = RP_L, color = "black", fill = "gray") +
+  geom_sf(data = LV, color = "red", linewidth = 1, fill = NA) +
   scale_fill_manual(
     values = setNames(colors, levels(dat_map$IDH_interval)),
     guide = guide_legend(title = "Indice de Desarrollo Humano")
   ) +
   coord_sf(xlim = c(-77.12, -76.7), ylim = c(-12.17, -11.95), expand = FALSE)
 ```
+
+```{r}
+a <- st_centroid(LV)
+```
+```{r}
+b <- st_coordinates(a)
+colnames(b) <- c("x", "y")
+b <- as.data.frame(b)
+```
+
+
+
+
+
+```{r}
+ggplot(dat_map) +
+  geom_sf(aes(fill = IDH), color = "black") +
+  geom_sf(data = RP_L, color = "black", fill = "gray") +
+  geom_sf(data = LV, color = "darkblue", linewidth = 0.9, fill = NA) +
+  geom_text(data = data.frame(x = -77.015, y = -12.066, label = "La Victoria"), aes(x = x, y = y, label = label), color = "black", size = 3) +
+  scale_fill_gradient(
+    low = "#FF0000",
+    high = "#00EA2B") +
+  coord_sf(xlim = c(-77.12, -76.7), ylim = c(-12.17, -11.95), expand = FALSE)
+```
+
+```{r}
+ggplot(dat_map) +
+  geom_sf(aes(fill = H_ALTO), color = "black") +
+  geom_sf(data = RP_L, color = "black", fill = "gray") +
+  geom_sf(data = LV, color = "darkblue", linewidth = 0.9, fill = NA) +
+  geom_text(data = data.frame(x = -77.015, y = -12.066, label = "La Victoria"), aes(x = x, y = y, label = label), color = "black", size = 3) +
+  scale_fill_gradient(
+    low = "white",
+    high = "purple",
+    limits = c(0, 100)) +
+  coord_sf(xlim = c(-77.12, -76.7), ylim = c(-12.17, -11.95), expand = FALSE)
+```
+
+```{r}
+ggplot(dat_map) +
+  geom_sf(aes(fill = H_MDALTO), color = "black") +
+  geom_sf(data = RP_L, color = "black", fill = "gray") +
+  geom_sf(data = LV, color = "darkblue", linewidth = 0.9, fill = NA) +
+  geom_text(data = data.frame(x = -77.015, y = -12.066, label = "La Victoria"), aes(x = x, y = y, label = label), color = "black", size = 3) +
+  scale_fill_gradient(
+    low = "white",
+    high = "yellow",
+    limits = c(0, 100)) +
+  coord_sf(xlim = c(-77.12, -76.7), ylim = c(-12.17, -11.95), expand = FALSE)
+```
+
+```{r}
+ggplot(dat_map) +
+  geom_sf(aes(fill = H_MEDIO), color = "black") +
+  geom_sf(data = RP_L, color = "black", fill = "gray") +
+  geom_sf(data = LV, color = "darkblue", linewidth = 0.9, fill = NA) +
+  geom_text(data = data.frame(x = -77.015, y = -12.066, label = "La Victoria"), aes(x = x, y = y, label = label), color = "black", size = 3) +
+  scale_fill_gradient(
+    low = "white",
+    high = "darkorange",
+    limits = c(0, 100)) +
+  coord_sf(xlim = c(-77.12, -76.7), ylim = c(-12.17, -11.95), expand = FALSE)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ```{r}
 summary(dat_map$IDH_interval)
