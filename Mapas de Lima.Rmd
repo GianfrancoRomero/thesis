@@ -51,12 +51,49 @@ ggplot() + geom_sf(data = LV, color = "blue")
 
 
 ```{r}
+custom_palette <- c("#FF0000", "#EA4000", "#EA8700", "#EAEA00", "#8AEA00", "#00EA2B")
+
 ggplot(dat_map) +
   geom_sf(aes(fill = IDH), color = "black") +
   geom_sf(data = LV, color = "purple", linewidth = 1, fill = NA) +
-  scale_fill_continuous(low = "#FF0000", high = "#00EA2B") +
+ scale_fill_gradient(
+    low = "#FF0000",
+    high = "#00EA2B",
+    breaks = c(0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1), # Especifica tus puntos de ruptura
+    limits = c(0.4, 1) # Limita la escala a tu rango deseado
+  ) +
   coord_sf(xlim = c(-77.12, -76.7), ylim = c(-12.17,-11.95), expand = FALSE)
 ```
+
+
+```{r}
+RP_W <- subset(dat_map, ALCALDE_RP == 1)
+ggplot() + geom_sf(data = RP_W, color = "blue")
+```
+
+
+
+```{r}
+breaks <- c(0.5, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9)
+
+colors <- c("#FF0000", "#FF6400", "#FFB800", "#FFF800", "#ADD100", "#47A300", "#007500")
+
+dat_map$IDH_interval <- cut(dat_map$IDH, breaks = breaks, include.lowest = TRUE)
+
+ggplot(dat_map) +
+  geom_sf(aes(fill = IDH_interval), color = "black") +
+  geom_sf(data = RP_W, color = "purple", linewidth = 1, fill = NA) +
+  scale_fill_manual(
+    values = setNames(colors, levels(dat_map$IDH_interval)),
+    guide = guide_legend(title = "Indice de Desarrollo Humano")
+  ) +
+  coord_sf(xlim = c(-77.12, -76.7), ylim = c(-12.17, -11.95), expand = FALSE)
+```
+
+```{r}
+summary(dat_map$IDH_interval)
+```
+
 
 ```{r}
 ggplot(dat_map) +
