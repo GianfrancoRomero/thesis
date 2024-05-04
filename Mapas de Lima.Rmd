@@ -10,7 +10,7 @@ library(rio)
 ```
 
 ```{r}
-unzip("distritos_INEI.zip", junkpaths = FALSE)
+#unzip("distritos_INEI.zip", junkpaths = FALSE)
 ```
 
 
@@ -32,17 +32,89 @@ library(ggplot2)
 ggplot(mapa_lima) + geom_sf() + theme_void()
 ```
 
+```{r}
+data_lima = import("data_lima.xlsx")
+```
+
+```{r}
+dat_map = merge(x = mapa_lima, y = data_lima, by = c("UBIGEO", "DISTRITO"))
+```
+
+```{r}
+LV <- subset(dat_map, DISTRITO == "LA VICTORIA")
+```
 
 
+```{r}
+ggplot() + geom_sf(data = LV, color = "blue")
+```
 
 
+```{r}
+ggplot(dat_map) +
+  geom_sf(aes(fill = IDH), color = "black") +
+  geom_sf(data = LV, color = "purple", linewidth = 1, fill = NA) +
+  scale_fill_continuous(low = "#FF0000", high = "#00EA2B") +
+  coord_sf(xlim = c(-77.12, -76.7), ylim = c(-12.17,-11.95), expand = FALSE)
+```
 
+```{r}
+ggplot(dat_map) +
+  geom_sf(aes(fill = ALCALDE_RP), color = "black") +
+  geom_sf(data = LV, color = "purple", linewidth = 1, fill = NA) +
+  scale_fill_manual(values=c("lightgray","#4BBADE")) +
+  coord_sf(xlim = c(-77.12, -76.7), ylim = c(-12.17,-11.95), expand = FALSE)
+```
 
+```{r}
+ggplot(dat_map) +
+  geom_sf(aes(fill = VOTOS_DIS), color = "black") +
+  scale_fill_continuous(low = "white", high = "#4BBADE") +
+  coord_sf(xlim = c(-77.1, -76.7), ylim = c(-12.2,-11.9), expand = FALSE)
+```
 
+```{r}
+dat_map$ALCALDE_RP = as.factor(dat_map$ALCALDE_RP)
+```
 
+```{r}
+summary(dat_map$IDH)
+```
 
+```{r}
+ggplot(dat_map) +
+  geom_sf(aes(fill = H_ALTO), color = "black") +
+  scale_fill_continuous(low = "white", high = "purple")  +
+  coord_sf(xlim = c(-77.1, -76.7), ylim = c(-12.2,-11.9), expand = FALSE)
+```
 
+```{r}
+ggplot(dat_map) +
+  geom_sf(aes(fill = H_MDALTO), color = "black") +
+  scale_fill_continuous(low = "white", high = "yellow")  +
+  coord_sf(xlim = c(-77.1, -76.7), ylim = c(-12.2,-11.9), expand = FALSE)
+```
 
+```{r}
+ggplot(dat_map) +
+  geom_sf(aes(fill = H_MEDIO), color = "black") +
+  scale_fill_continuous(low = "white", high = "darkorange")  +
+  coord_sf(xlim = c(-77.1, -76.7), ylim = c(-12.2,-11.9), expand = FALSE)
+```
+
+```{r}
+ggplot(dat_map) +
+  geom_sf(aes(fill = H_MDBAJO), color = "black") +
+  scale_fill_continuous(low = "white", high = "#894D0D")  +
+  coord_sf(xlim = c(-77.1, -76.7), ylim = c(-12.2,-11.9), expand = FALSE)
+```
+
+```{r}
+ggplot(dat_map) +
+  geom_sf(aes(fill = H_BAJO), color = "black") +
+  scale_fill_continuous(low = "white", high = "red")  +
+  coord_sf(xlim = c(-77.1, -76.7), ylim = c(-12.2,-11.9), expand = FALSE)
+```
 
 
 
