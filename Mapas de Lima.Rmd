@@ -65,7 +65,7 @@ ggplot(dat_map,aes(x = IDH, y = VOTOS_LM)) +
 
 
 ```{r}
-ggplot(dat_map) +
+idh_rp <- ggplot(dat_map) +
   geom_sf(aes(fill = IDH), color = "black") +
   geom_sf(data = RP_L, color = "black", fill = "gray") +
   geom_sf(data = LV, color = "darkblue", linewidth = 0.9, fill = NA) +
@@ -80,7 +80,17 @@ ggplot(dat_map) +
        caption = "Fuente: PNUD (2019). Elaboración propia.",
        x = " ",
        y = " ")
+
+idh_rp
 ```
+
+```{r}
+ggsave("idh_rp.png")
+```
+
+
+
+
 
 ```{r}
 ggplot(dat_map) +
@@ -163,10 +173,47 @@ ggplot(dat_map) +
 dat_map$ALCALDE_RP = as.factor(dat_map$ALCALDE_RP)
 ```
 
+```{r}
+
+```
 
 
 
 
+
+
+
+
+
+
+# IDH Lima metropolitana
+
+```{r}
+idh_lm <- ggplot(dat_map) +
+  geom_sf(aes(fill = IDH), color = "black", linewidth = 0) +
+  scale_fill_viridis_b(name = "Índice de Desarrollo Humano",
+                       limits = c(0.50, 0.85),
+                       breaks = seq(0.50, 0.85,0.5),
+                       )  +
+  labs(title = "Índice de Desarrollo Humano en Lima metropolitana",
+       subtitle = ' ',
+       caption = "Fuente: PNUD (2019). Elaboración propia.",
+       x = " ",
+       y = " ") +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.border = element_rect(colour = "black", fill = NA)) +
+  guides(colour = )
+
+idh_lm
+```
+
+
+```{r}
+ggsave("idh_lm.png")
+```
 
 
 
